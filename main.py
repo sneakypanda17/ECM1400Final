@@ -1,24 +1,52 @@
-# main.py
-from flask import Flask, render_template, request
-# Import any necessary modules or functions you've written
+from flask import Flask, render_template, request, session
+from mp_game_engine import ai_opponent_game_loop, generate_attack, players  # Import your game logic here
+import json
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Change this to a random secret key for session management
 
-@app.route('/placement')
+@app.route('/placement', methods=['GET', 'POST'])
 def placement_interface():
-    # Logic to handle the placement page
-    return render_template('placement.html')  # Assuming you have a template named 'placement.html'
+    if request.method == 'POST':
+        # Handle the placement data submitted by the user
+        # You will need to extract and process the data from the request.form or request.json
+        # Then update the player's board with the ship placements
+        pass
+    else:
+        # If it's a GET request, just render the placement page
+        return render_template('placement.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def root():
-    if request.method == 'POST':
-        # Handle POST request - typically when the user submits their move or initializes the game
-        pass  # Add logic to process the game state
-    else:
-        # Handle GET request - usually just rendering the page
-        pass  # Add logic to display the current game state or a new game setup
+    if 'game_state' not in session:
+        session['game_state'] = initialise_game_state()  # Define this function to set up a new game
 
-    return render_template('gameplay.html')  # Assuming you have a template named 'gameplay.html'
+    if request.method == 'POST':
+        # Process the player's move
+        coordinate = extract_coordinate_from_request(request)  # Define this function based on your form data
+        process_player_move(coordinate, session['game_state'])  # Define this function to update game state
+
+        # AI move
+        ai_coordinate = generate_attack()
+        process_ai_move(ai_coordinate, session['game_state'])  # Define this function for AI's move
+
+    return render_template('main.html', game_state=session['game_state'])
+
+def initialise_game_state():
+    # Initialize and return the initial game state
+    pass
+
+def extract_coordinate_from_request(request):
+    # Extract and return the coordinate from the request
+    pass
+
+def process_player_move(coordinate, game_state):
+    # Update the game state based on the player's move
+    pass
+
+def process_ai_move(coordinate, game_state):
+    # Update the game state based on the AI's move
+    pass
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Set debug=False in a production environment
+    app.run(debug=True)
