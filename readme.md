@@ -66,9 +66,9 @@ This is the culmination of learning python and html over 3 months for ECM1400-Pr
 
 ### Built With
 
-* [![Python][Python]][]
-* [![FLASK][Flask]][]
-* [![HTML][HTML]][]
+* [![Python]]
+* [![FLASK]]
+* [![HTML]]
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
