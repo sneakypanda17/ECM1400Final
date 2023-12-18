@@ -64,31 +64,21 @@ def place_battleships_random(board, ships):
 def place_battleships_custom(
     board: list[list[None]], battleships: dict[str, int]
 ) -> list[list]:
-    """Custom algorithm of battleships using placement.json"""
-    # Gets and constructs absolute path of file
-    # This is so that the file can be accessed by any environment
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "placement.json")
-    # Load ship placement data from placement.json
     with open(file_path, "r", encoding="utf-8") as placement:
         ship_data = json.load(placement)
-
-    # Place each ship on the board based on custom placement data
     for ship, key in ship_data.items():
-        # Creates variables of all ship data
         col = int(key[1])
         row = int(key[0])
         direction = key[2]
         length = battleships.get(ship)
-
-        # Places the ship onto the board depending on direction
         if direction == "v":
             for i in range(length):
                 board[col + i][row] = ship
         if direction == "h":
             for i in range(length):
                 board[col][row + i] = ship
-
     return board
 
 def can_place_ship(board, row, col, size, horizontal):
@@ -105,12 +95,8 @@ def place_ship(board, ship, row, col, size, horizontal):
         for i in range(size):
             board[row + i][col] = ship
 
-
 def print_board(board):
-    # Print column headers
     print("  " + " ".join(str(i) for i in range(len(board[0]))))
-    
-    # Print each row of the board with row number
     for i, row in enumerate(board):
         print(str(i) + " " + " ".join('.' if cell is None else cell for cell in row))
 

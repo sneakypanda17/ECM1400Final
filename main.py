@@ -62,22 +62,20 @@ def placement_interface():
 
     return None
 
+
+ships_placed = False
+
+@app.route("/", methods=["GET"])
 @app.route("/", methods=["GET"])
 def root():
-    global player_board
+    global player_board, player_battleships
 
     if request.method == "GET":
+        player_board = initialise_board(size=BOARD_SIZE)
+        # Re-read placement data and update the player's board
         try:
             with open('placement.json', 'r') as file:
                 placement_data = json.load(file)
-
-            formatted_placement_data = {
-                ship: {
-                    'row': int(data[0]),
-                    'col': int(data[1]),
-                    'horizontal': data[2] == 'h'
-                } for ship, data in placement_data.items()
-            }
 
             player_board = place_battleships(player_board, player_battleships, 'custom')
         except (FileNotFoundError, json.JSONDecodeError) as e:
@@ -89,19 +87,9 @@ def root():
     return render_template("main.html", player_board=player_board)
 
 
+
 @app.route("/attack", methods=["GET"])
 def process_attack():
-    """
-    Processes an attack made when the player clicks on the grid.
-
-    This function is called when a GET request is made to the "/attack" route.
-    It reads the attack coordinates from the request arguments (where the player clicks
-    on the board) and plays one turn of battleships. This function processes the turns
-    of both the player and the BOT and will check if the game is over each turn.
-    When game is over, GET requests made to the "/attack" route will be ignored
-    therefore preventing further attacks.
-    """
-
     if request.args:
         try:
             # Checks if game is over
