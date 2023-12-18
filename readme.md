@@ -8,143 +8,220 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
-# Battleships
+<br />
+<div align="center">
+  <a href="https://github.com/github_username/repo_name">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-## Description
+<h3 align="center">Battleships</h3>
 
-The Battleship game is a strategic guessing game typically played by two players. In the traditional board game, each player has a board with a grid of squares, typically 10x10, where they can place a fleet of ships without the opponent's knowledge. The objective is to sink your opponent's fleet before they sink yours. Each player takes turns to declare coordinates for their strike and the opponent replies whether that is a hit or miss until one player has no battleships remaining. 
+  <p align="center">
+    project_description
+    <br />
+    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    ·
+    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+  </p>
+</div>
 
-This project is a web based flask implememtation of a single player vs AI version of this popular game.
 
-## Prerequisites
 
-The following must be installed.
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
-- [Python](https://www.python.org/) 3.9.6
-- [Flask](https://flask.palletsprojects.com/)
-- [pytest](https://docs.pytest.org/en/stable/)
 
-You can install these dependencies using the following commands:
 
-## Install Python 3.9.6
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-## For Windows
+[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Visit [Python Downloads](https://www.python.org/downloads/release/python-396/) and download the installer. Follow the installation instructions.
+Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
 
-## For macOS
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Open a terminal and run:
 
-```bash
-brew install python@3.9.
-```
 
-## For Linux(Debian/Ubuntu)
+### Built With
 
-Open a terminal and run:
+* [![Python][Python.com]][Python]
+* [![React][React.js]][React-url]
+* [![Vue][Vue.js]][Vue-url]
+* [![Angular][Angular.io]][Angular-url]
+* [![Svelte][Svelte.dev]][Svelte-url]
+* [![Laravel][Laravel.com]][Laravel-url]
+* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+* [![JQuery][JQuery.com]][JQuery-url]
 
-```bash
-sudo apt-get update
-sudo apt-get install python3.9
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Install Flask and pytest
 
-```bash
-pip install flask
-pip install pytest
-```
 
-Make sure to have Python and pip installed on your system before executing the commands.
-
-## Installation
-
-Follow these steps to install and set up the project:
-
-1. Clone the repository: `git clone https://github.com/W3r5l3y/ECM1400-Battleships-Coursework.git`
-2. Navigate to the project directory: `cd battleships`
-3. Install the project using the `setup.py` file:
-
-```bash
-python setup.py install
-```
-
-Alternatively, you can test the package by installing it from Test PyPI. First, create a virtual environment:
-
-```bash
-python -m venv venv
-source venv/bin/activate   # On Windows, use `venv\Scripts\activate`
-```
-
-Then, install the package from Test PyPI:
-
-```bash
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ battleships-pgk-jworley==0.0.1
-```
-
-Now you can use the package in your virtual environment.
-
+<!-- GETTING STARTED -->
 ## Getting Started
 
-Run the main module to start the web server:
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
 
-```bash
-python main.py
-```
+### Prerequisites
 
-Open your web browser and go to [http://127.0.0.1:5000/placement](http://127.0.0.1:5000/placement) to begin placing your ships on a grid.
-After successfully placing your fleet and submitting the grid, you will be redirected to the root page [http://127.0.0.1:5000](http://127.0.0.1:5000). From there, you can initiate attacks on your opponent's grid until either you or the opponent emerges victorious in the game.
+This is an example of how to list things you need to use the software and how to install them.
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
 
-## Testing
+### Installation
 
-To run the tests for the project, you can use the following commands for different testing modules:
+1. Get a free API Key at [https://example.com](https://example.com)
+2. Clone the repo
+   ```sh
+   git clone https://github.com/github_username/repo_name.git
+   ```
+3. Install NPM packages
+   ```sh
+   npm install
+   ```
+4. Enter your API in `config.js`
+   ```js
+   const API_KEY = 'ENTER YOUR API';
+   ```
 
-### Test Components
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Run this command to test the individual components of the Battleships project.
 
-```bash
-pytest test_components.py
-```
 
-Execute this command to ensure the overall functionality of the Battleships project.
+<!-- USAGE EXAMPLES -->
+## Usage
 
-```bash
-pytest test_functionality.py
-```
+Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-Use this command to run tests for the helper functions utilized in the Battleships project.
+_For more examples, please refer to the [Documentation](https://example.com)_
 
-```bash
-pytest test_helper_functions.py
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Run this command to check the specific functionality related to student implementations.
 
-```bash
-pytest test_students.py
-```
 
-## Developer Documentation
+<!-- ROADMAP -->
+## Roadmap
 
-The program is organized into four distinct modules:
+- [ ] Feature 1
+- [ ] Feature 2
+- [ ] Feature 3
+    - [ ] Nested Feature
 
-- **components.py:** This module houses functions responsible for initializing either a `simple_game_loop` or an `ai_opponent_game_loop`, including tasks like board initialization and battleship placement.
+See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
 
-- **game_engine.py:** Functions crucial for the gameplay mechanics of a `simple_game_loop` are stored in this module. This includes operations like receiving coordinate inputs from the user and executing attacks on the board.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- **mp_game_engine.py:** Dedicated to the mechanics of an `ai_opponent_game_loop`, this module encompasses additional functions. These functions involve tasks such as displaying the user's board and generating AI attacks that target the user's board.
 
-- **main.py:** The main module orchestrates the integration of functions from the preceding modules using a Flask web interface. This integration results in the creation of an online Battleships game, providing an interactive and engaging platform for players.
 
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- LICENSE -->
 ## License
 
-This project is licensed under the [MIT License](LICENSE.txt). See the [LICENSE.txt](LICENSE.txt) file for more details.
+Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-### Details
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- **Author:** James Worley
-- **Source code:** [GitHub Repository](https://github.com/W3r5l3y/ECM1400-Battleships-Coursework)
-- **PyPI:** [Package on PyPI](https://test.pypi.org/project/battleships-pgk-jworley/0.0.2/)
-- **Acknowledgments:** This was the coursework project made for ECM1400 at Exeter University
+
+
+<!-- CONTACT -->
+## Contact
+
+Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+
+Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+
+* []()
+* []()
+* []()
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
+[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
+[forks-url]: https://github.com/github_username/repo_name/network/members
+[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
+[stars-url]: https://github.com/github_username/repo_name/stargazers
+[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
+[issues-url]: https://github.com/github_username/repo_name/issues
+[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
+[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/linkedin_username
+[product-screenshot]: images/screenshot.png
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
+[Vue-url]: https://vuejs.org/
+[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[Angular-url]: https://angular.io/
+[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
+[Svelte-url]: https://svelte.dev/
+[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
+[Laravel-url]: https://laravel.com
+[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
+[Bootstrap-url]: https://getbootstrap.com
+[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
+[JQuery-url]: https://jquery.com 
