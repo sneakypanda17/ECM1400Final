@@ -10,12 +10,13 @@ app = Flask(__name__)
 
 @app.route("/placement", methods=["GET", "POST"])
 def placement_interface():
-
+    # Handle GET request
     if request.method == "GET":
         return render_template(
             "placement.html", ships=player_battleships, board_size=BOARD_SIZE
         )
 
+    # Handle POST request
     if request.method == "POST":
         data = request.get_json()
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -43,8 +44,6 @@ def root():
         players["player"]["board"] = player_board
 
     return render_template("main.html", player_board=player_board)
-
-
 
 @app.route("/attack", methods=["GET"])
 def process_attack():

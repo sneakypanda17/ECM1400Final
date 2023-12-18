@@ -3,9 +3,11 @@ import json
 import os
 
 def initialise_board(size=10):
+    # Initializes and returns a game board as a list of lists filled with 'None', representing an empty board.
     return [[None for _ in range(size)] for _ in range(size)]
 
 def create_battleships(filename='battleships.txt'):
+    # Reads battleship data from a file and returns a dictionary with ship names as keys and their sizes as values.
     battleships = {}
     try:
         with open(filename, 'r') as file:
@@ -22,6 +24,7 @@ def create_battleships(filename='battleships.txt'):
     return battleships
 
 def place_battleships(board, ships, algorithm='simple'):
+    # Places ships on the board using the specified algorithm.
     if algorithm == 'simple':
         return place_battleships_simple(board, ships)
     elif algorithm == 'random':
@@ -33,6 +36,7 @@ def place_battleships(board, ships, algorithm='simple'):
         return board
 
 def place_battleships_simple(board, ships):
+    # Places ships on the board starting from the top, each ship in a new row.
     row = 0
     for ship, size in ships.items():
         if row + size > len(board):
@@ -44,6 +48,7 @@ def place_battleships_simple(board, ships):
     return board
 
 def place_battleships_random(board, ships):
+    # Places ships randomly on the board.
     for ship, size in ships.items():
         placed = False
         while not placed:
@@ -56,9 +61,8 @@ def place_battleships_random(board, ships):
                 placed = True
     return board
 
-def place_battleships_custom(
-    board: list[list[None]], battleships: dict[str, int]
-) -> list[list]:
+def place_battleships_custom(board, ships):
+    # Places ships on the board based on custom placement data from placement.json file.
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "placement.json")
     with open(file_path, "r", encoding="utf-8") as placement:
@@ -67,7 +71,7 @@ def place_battleships_custom(
         col = int(key[1])
         row = int(key[0])
         direction = key[2]
-        length = battleships.get(ship)
+        length = ships.get(ship)
         if direction == "v":
             for i in range(length):
                 board[col + i][row] = ship
@@ -77,12 +81,14 @@ def place_battleships_custom(
     return board
 
 def can_place_ship(board, row, col, size, horizontal):
+    # Checks if a ship can be placed at the specified position.
     if horizontal:
         return all(0 <= col + i < len(board[0]) and board[row][col + i] is None for i in range(size))
     else:
         return all(0 <= row + i < len(board) and board[row + i][col] is None for i in range(size))
 
 def place_ship(board, ship, row, col, size, horizontal):
+    # Places a ship on the board at the specified position.
     if horizontal:
         for i in range(size):
             board[row][col + i] = ship
@@ -91,11 +97,11 @@ def place_ship(board, ship, row, col, size, horizontal):
             board[row + i][col] = ship
 
 def print_board(board):
+    # Prints the board to the console for visualization.
     print("  " + " ".join(str(i) for i in range(len(board[0]))))
     for i, row in enumerate(board):
         print(str(i) + " " + " ".join('.' if cell is None else cell for cell in row))
 
 def check_game_over(player, players):
+    # Checks if all ships of a player have been sunk.
     return all(size == 0 for size in players[player]["battleships"].values())
-
-
