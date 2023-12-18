@@ -66,9 +66,9 @@ This is the culmination of learning python and html over 3 months for ECM1400-Pr
 
 ### Built With
 
-* [![Python]]
-* [![FLASK]]
-* [![HTML]]
+* [![Python][Python-img]]
+* [![FLASK][FLASK-img]]
+* [![HTML][HTML-img]]
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -199,9 +199,9 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
 
-[Python]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
+[Python-img]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 
-[HTML]: https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white
+[HTML-img]: https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white
 
-[FLASK]: https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white
+[FLASK-img]: https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white
 
