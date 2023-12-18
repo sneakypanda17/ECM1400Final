@@ -1,10 +1,26 @@
+"""
+This is the main module for the Battleships game.
+
+This module uses Flask to create a web server that the Battleships game is played on. 
+It defines routes for the game, including the initial placement of ships and processing 
+the player and BOT turns.
+
+The game logic is handled by the imported 'game_engine' and 'mp_game_engine' modules, 
+and the 'components' module is used for creating and managing game data like 
+the board and ship placement.
+
+The placement of ships is handled on the '/placement' route.
+The main game is handled on the '/' route.
+The processing of attacks is handled on the '/attack' route.
+"""
+
 import os
 import json
 from flask import Flask, render_template, jsonify, request
 
-from components import initialise_board, create_battleships, place_battleships, check_game_over
-from  game_engine import attack, print_board, cli_coordinates_input, simple_game_loop
-from mp_game_engine import generate_attack, ai_opponent_game_loop
+import components as c
+import game_engine as ge
+import mp_game_engine as mge
 
 # Initialise the Flask object
 app = Flask(__name__)
@@ -12,6 +28,17 @@ app = Flask(__name__)
 
 @app.route("/placement", methods=["GET", "POST"])
 def placement_interface():
+    """
+    Handles the initial placement of the ships on the board.
+
+    This function serves a dual purpose depending on the HTTP method used.
+
+    If a GET request is made, it returns a rendered template of the game board
+    and the player can place their battleships onto the board.
+
+    If a POST request is made, it receives the ship placement data from the
+    webpage and writes the ship placement data to a JSON file.
+    """
 
     if request.method == "GET":
         # Shows the placement.html template where the player can place battleships
@@ -35,27 +62,45 @@ def placement_interface():
 
     return None
 
-
 @app.route("/", methods=["GET"])
 def root():
-    # Declaring global variable
     global player_board
 
     if request.method == "GET":
-        # Places battleships on players board according to their choice on /placement
-        # This is done by reading the ship placements from the placement.json file
-        player_board = place_battleships(
-            player_board, player_battleships, algorithm="custom"
-        )
-        # Updates player data dictionary with board with battleships placed
+        try:
+            with open('placement.json', 'r') as file:
+                placement_data = json.load(file)
+
+            formatted_placement_data = {
+                ship: {
+                    'row': int(data[0]),
+                    'col': int(data[1]),
+                    'horizontal': data[2] == 'h'
+                } for ship, data in placement_data.items()
+            }
+
+            player_board = place_battleships(player_board, player_battleships, 'custom', formatted_placement_data)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Error loading placement data: {e}")
+            # Handle error - Redirect to placement page or show error message
+
         players["player"]["board"] = player_board
 
-    # Returns the main.html template with the player's board data
     return render_template("main.html", player_board=player_board)
 
 
 @app.route("/attack", methods=["GET"])
 def process_attack():
+    """
+    Processes an attack made when the player clicks on the grid.
+
+    This function is called when a GET request is made to the "/attack" route.
+    It reads the attack coordinates from the request arguments (where the player clicks
+    on the board) and plays one turn of battleships. This function processes the turns
+    of both the player and the BOT and will check if the game is over each turn.
+    When game is over, GET requests made to the "/attack" route will be ignored
+    therefore preventing further attacks.
+    """
 
     if request.args:
         try:
@@ -63,7 +108,7 @@ def process_attack():
             player_list = ["player", "BOT"]
             for username in player_list:
                 game_over = False
-                game_over = check_game_over(username, players)
+                game_over = c.check_game_over(username, players)
                 if game_over is True:
                     winner = "BOT" if username == "player" else "PLAYER"
                     break
@@ -83,7 +128,7 @@ def process_attack():
                 # Adds player attack to list to prevent repeat attacks on same coordinates
                 player_already_attacked.append(player_attack)
                 # Performs attack on bot board and returns hit or miss as True or False
-                outcome = attack(
+                outcome = ge.attack(
                     player_attack,
                     players["BOT"]["board"],
                     players["BOT"]["battleships"],
@@ -92,14 +137,14 @@ def process_attack():
                 # BOT attack on Player's board
                 # Loops until bot move is unique
                 while True:
-                    bot_attack = generate_attack(BOARD_SIZE)
+                    bot_attack = mge.generate_attack(BOARD_SIZE)
                     # Checks if attack has already been played
                     if bot_attack not in bot_already_attacked:
                         break
                 # Adds bot attack to list for comparison
                 bot_already_attacked.append(bot_attack)
                 # Performs attack on player board
-                attack(
+                ge.attack(
                     bot_attack,
                     players["player"]["board"],
                     players["player"]["battleships"],
@@ -109,7 +154,7 @@ def process_attack():
             player_list = ["player", "BOT"]
             for username in player_list:
                 game_over = False
-                game_over = check_game_over(username, players)
+                game_over = c.check_game_over(username, players)
                 if game_over is True:
                     winner = "BOT" if username == "player" else "PLAYER"
                     break
@@ -153,14 +198,14 @@ bot_already_attacked = []
 player_already_attacked = []
 
 # Initialises the boards and battleships for player and BOT
-player_board = initialise_board(size=BOARD_SIZE)
-bot_board = initialise_board(size=BOARD_SIZE)
+player_board = c.initialise_board(size=BOARD_SIZE)
+bot_board = c.initialise_board(size=BOARD_SIZE)
 
-player_battleships = create_battleships()
-bot_battleships = create_battleships()
+player_battleships = c.create_battleships()
+bot_battleships = c.create_battleships()
 
 # Places BOT's battleships onto bot_board using random algorithm
-bot_board = place_battleships(bot_board, bot_battleships, algorithm="random")
+bot_board = c.place_battleships(bot_board, bot_battleships, algorithm="random")
 
 # Saves board and battleships into players dictionary
 players = {

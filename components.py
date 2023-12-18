@@ -24,16 +24,20 @@ def create_battleships(filename='battleships.txt'):
     
     return battleships
 
-def place_battleships(board, ships, algorithm='simple'):
+def place_battleships(board, ships, algorithm='simple', placements=None):
     if algorithm == 'simple':
         return place_battleships_simple(board, ships)
     elif algorithm == 'random':
         return place_battleships_random(board, ships)
     elif algorithm == 'custom':
-        return place_battleships_custom(board, ships)
+        if placements is None:
+            print("No placement data provided for custom algorithm.")
+            return board
+        return place_battleships_custom(board, ships, placements)
     else:
         print(f"Algorithm '{algorithm}' is not implemented yet.")
         return board
+
 
 def place_battleships_simple(board, ships):
     row = 0
