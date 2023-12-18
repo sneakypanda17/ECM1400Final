@@ -5,7 +5,7 @@ from game_engine import attack, print_board, cli_coordinates_input, simple_game_
 players = {}
 
 
-def generate_attack(board_size):
+def generate_attack(board_size=10):
     return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
 
 
