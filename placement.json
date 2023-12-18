@@ -1,0 +1,7 @@
+{
+    "Aircraft Carrier": {"row": 0, "col": 0, "horizontal": true},
+    "Battleship": {"row": 2, "col": 2, "horizontal": false},
+    "Cruiser": {"row": 4, "col": 5, "horizontal": true},
+    "Submarine": {"row": 6, "col": 6, "horizontal": false},
+    "Destroyer": {"row": 8, "col": 1, "horizontal": true}
+}
