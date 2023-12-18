@@ -2,11 +2,8 @@ import random
 import json
 import os
 
-
 def initialise_board(size=10):
     return [[None for _ in range(size)] for _ in range(size)]
-
-
 
 def create_battleships(filename='battleships.txt'):
     battleships = {}
@@ -22,7 +19,6 @@ def create_battleships(filename='battleships.txt'):
         print(f"Error: The file '{filename}' was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
-    
     return battleships
 
 def place_battleships(board, ships, algorithm='simple'):
@@ -35,7 +31,6 @@ def place_battleships(board, ships, algorithm='simple'):
     else:
         print(f"Algorithm '{algorithm}' is not implemented yet.")
         return board
-
 
 def place_battleships_simple(board, ships):
     row = 0

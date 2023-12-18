@@ -1,4 +1,3 @@
-# game_engine.py
 from components import initialise_board, print_board, create_battleships, place_battleships
 
 def attack(coordinates, board, battleships):
