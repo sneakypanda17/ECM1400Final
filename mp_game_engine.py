@@ -1,12 +1,17 @@
-# mp_game_engine.py
+
 import random
 from components import initialise_board, create_battleships, place_battleships
 from game_engine import attack, print_board, cli_coordinates_input, simple_game_loop
 
 players = {}
 
-def generate_attack(board_size):
-    return (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
+
+def generate_attack(board_size, previous_attacks):
+    while True:
+        attack = (random.randint(0, board_size - 1), random.randint(0, board_size - 1))
+        if attack not in previous_attacks:
+            return attack
+
 
 def ai_opponent_game_loop():
     print("Welcome to Battleship against AI!")

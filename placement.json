@@ -1,7 +1,27 @@
 {
-    "Aircraft Carrier": {"row": 0, "col": 0, "horizontal": true},
-    "Battleship": {"row": 2, "col": 2, "horizontal": false},
-    "Cruiser": {"row": 4, "col": 5, "horizontal": true},
-    "Submarine": {"row": 6, "col": 6, "horizontal": false},
-    "Destroyer": {"row": 8, "col": 1, "horizontal": true}
+    "Aircraft Carrier": [
+        "1",
+        "3",
+        "v"
+    ],
+    "Battleship": [
+        "4",
+        "2",
+        "h"
+    ],
+    "Cruiser": [
+        "4",
+        "6",
+        "h"
+    ],
+    "Submarine": [
+        "4",
+        "4",
+        "h"
+    ],
+    "Destroyer": [
+        "4",
+        "8",
+        "h"
+    ]
 }

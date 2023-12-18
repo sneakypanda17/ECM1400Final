@@ -98,3 +98,7 @@ def print_board(board):
     for i, row in enumerate(board):
         print(str(i) + " " + " ".join('.' if cell is None else cell for cell in row))
 
+def check_game_over(player, players):
+    return all(size == 0 for size in players[player]["battleships"].values())
+
+

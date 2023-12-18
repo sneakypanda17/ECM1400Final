@@ -1,52 +1,179 @@
-from flask import Flask, render_template, request, session
-from mp_game_engine import ai_opponent_game_loop, generate_attack, players  # Import your game logic here
+import os
 import json
+from flask import Flask, render_template, jsonify, request
 
+import components
+import game_engine
+import mp_game_engine
+
+# Initialise the Flask object
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Change this to a random secret key for session management
 
-@app.route('/placement', methods=['GET', 'POST'])
+
+@app.route("/placement", methods=["GET", "POST"])
 def placement_interface():
-    if request.method == 'POST':
-        # Handle the placement data submitted by the user
-        # You will need to extract and process the data from the request.form or request.json
-        # Then update the player's board with the ship placements
-        pass
-    else:
-        # If it's a GET request, just render the placement page
-        return render_template('placement.html')
 
-@app.route('/', methods=['GET', 'POST'])
+    if request.method == "GET":
+        # Shows the placement.html template where the player can place battleships
+        return render_template(
+            "placement.html", ships=player_battleships, board_size=BOARD_SIZE
+        )
+
+    if request.method == "POST":
+        # Requests ship placement data from webpage
+        data = request.get_json()
+        # Gets and constructs absolute path of file
+        # This is so that the file can be accessed by any environment
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(script_dir, "placement.json")
+        # Opens placement.json to write to file
+        with open(file_path, "w", encoding="utf-8") as json_file:
+            # Writes placement data to file
+            json.dump(data, json_file, indent=4)
+        # Returns success message
+        return jsonify({"Success": True})
+
+    return None
+
+
+@app.route("/", methods=["GET"])
 def root():
-    if 'game_state' not in session:
-        session['game_state'] = initialise_game_state()  # Define this function to set up a new game
+    # Declaring global variable
+    global player_board
 
-    if request.method == 'POST':
-        # Process the player's move
-        coordinate = extract_coordinate_from_request(request)  # Define this function based on your form data
-        process_player_move(coordinate, session['game_state'])  # Define this function to update game state
+    if request.method == "GET":
+        # Places battleships on players board according to their choice on /placement
+        # This is done by reading the ship placements from the placement.json file
+        player_board = components.place_battleships(
+            player_board, player_battleships, algorithm="custom"
+        )
+        # Updates player data dictionary with board with battleships placed
+        players["player"]["board"] = player_board
 
-        # AI move
-        ai_coordinate = generate_attack()
-        process_ai_move(ai_coordinate, session['game_state'])  # Define this function for AI's move
+    # Returns the main.html template with the player's board data
+    return render_template("main.html", player_board=player_board)
 
-    return render_template('main.html', game_state=session['game_state'])
 
-def initialise_game_state():
-    # Initialize and return the initial game state
-    pass
+@app.route("/attack", methods=["GET"])
+def process_attack():
 
-def extract_coordinate_from_request(request):
-    # Extract and return the coordinate from the request
-    pass
+    if request.args:
+        try:
+            # Checks if game is over
+            player_list = ["player", "BOT"]
+            for username in player_list:
+                game_over = False
+                game_over = components.check_game_over(username, players)
+                if game_over is True:
+                    winner = "BOT" if username == "player" else "PLAYER"
+                    break
 
-def process_player_move(coordinate, game_state):
-    # Update the game state based on the player's move
-    pass
+            # Attack phase
+            if game_over is not True:
+                # Player attack on BOT's board
+                # Requests attack coordinates from request arguments
+                # Loops until bot move is unique
+                row = request.args.get("x")
+                col = request.args.get("y")
+                player_attack = (int(col), int(row))
+                # Checks if attack has already been played
+                if player_attack in player_already_attacked:
+                    # If attack has already been played, stops function here
+                    return "Already Attacked"
+                # Adds player attack to list to prevent repeat attacks on same coordinates
+                player_already_attacked.append(player_attack)
+                # Performs attack on bot board and returns hit or miss as True or False
+                outcome = game_engine.attack(
+                    player_attack,
+                    players["BOT"]["board"],
+                    players["BOT"]["battleships"],
+                )
 
-def process_ai_move(coordinate, game_state):
-    # Update the game state based on the AI's move
-    pass
+                # BOT attack on Player's board
+                # Loops until bot move is unique
+                while True:
+                    bot_attack = mp_game_engine.generate_attack(BOARD_SIZE)
+                    # Checks if attack has already been played
+                    if bot_attack not in bot_already_attacked:
+                        break
+                # Adds bot attack to list for comparison
+                bot_already_attacked.append(bot_attack)
+                # Performs attack on player board
+                game_engine.attack(
+                    bot_attack,
+                    players["player"]["board"],
+                    players["player"]["battleships"],
+                )
 
-if __name__ == '__main__':
-    app.run(debug=True)
+            # Checks if game is over
+            player_list = ["player", "BOT"]
+            for username in player_list:
+                game_over = False
+                game_over = components.check_game_over(username, players)
+                if game_over is True:
+                    winner = "BOT" if username == "player" else "PLAYER"
+                    break
+
+            # If game over send game over message
+            if game_over is True:
+                if winner == "BOT":
+                    # If BOT wins send only BOT coordinates
+                    return jsonify(
+                        {
+                            "hit": False,
+                            "AI_Turn": bot_attack,
+                            "finished": (f"GAME OVER {winner} WINS!"),
+                        }
+                    )
+
+                # If player wins send only player coordinates
+                return jsonify(
+                    {
+                        "hit": True,
+                        "Player_Turn": (row, col),
+                        "finished": (f"GAME OVER {winner} WINS!"),
+                    }
+                )
+            # If game not over send both player coordinates
+            return jsonify(
+                {"hit": outcome, "Player_Turn": player_attack, "AI_Turn": bot_attack}
+            )
+
+        # If game over send game over message and prevent further attacks
+        except UnboundLocalError:
+            return "Game Over"
+
+    return "Unknown Error"
+
+
+# Initialises variables
+BOARD_SIZE = 10
+players = {}
+bot_already_attacked = []
+player_already_attacked = []
+
+# Initialises the boards and battleships for player and BOT
+player_board = components.initialise_board(size=BOARD_SIZE)
+bot_board = components.initialise_board(size=BOARD_SIZE)
+
+player_battleships = components.create_battleships()
+bot_battleships = components.create_battleships()
+
+# Places BOT's battleships onto bot_board using random algorithm
+bot_board = components.place_battleships(bot_board, bot_battleships, algorithm="random")
+
+# Saves board and battleships into players dictionary
+players = {
+    "player": {
+        "board": player_board,
+        "battleships": player_battleships,
+    },
+    "BOT": {
+        "board": bot_board,
+        "battleships": bot_battleships,
+    },
+}
+
+if __name__ == "__main__":
+    # Runs the Flask app
+    app.run()
