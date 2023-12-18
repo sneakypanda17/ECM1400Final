@@ -1,5 +1,6 @@
 import random
 import json
+import os
 
 
 def initialise_board(size=10):
@@ -24,16 +25,13 @@ def create_battleships(filename='battleships.txt'):
     
     return battleships
 
-def place_battleships(board, ships, algorithm='simple', placements=None):
+def place_battleships(board, ships, algorithm='simple'):
     if algorithm == 'simple':
         return place_battleships_simple(board, ships)
     elif algorithm == 'random':
         return place_battleships_random(board, ships)
     elif algorithm == 'custom':
-        if placements is None:
-            print("No placement data provided for custom algorithm.")
-            return board
-        return place_battleships_custom(board, ships, placements)
+        return place_battleships_custom(board, ships)
     else:
         print(f"Algorithm '{algorithm}' is not implemented yet.")
         return board
@@ -63,21 +61,34 @@ def place_battleships_random(board, ships):
                 placed = True
     return board
 
-def place_battleships_custom(board, ships):
-    try:
-        with open('placement.json', 'r') as file:
-            placements = json.load(file)
-        for ship, placement in placements.items():
-            if ship in ships:
-                row, col, horizontal = placement['row'], placement['col'], placement['horizontal']
-                if can_place_ship(board, row, col, ships[ship], horizontal):
-                    place_ship(board, ship, row, col, ships[ship], horizontal)
-    except FileNotFoundError:
-        print("Error: 'placement.json' file not found.")
-    except json.JSONDecodeError:
-        print("Error: 'placement.json' is not a valid JSON file.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+def place_battleships_custom(
+    board: list[list[None]], battleships: dict[str, int]
+) -> list[list]:
+    """Custom algorithm of battleships using placement.json"""
+    # Gets and constructs absolute path of file
+    # This is so that the file can be accessed by any environment
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, "placement.json")
+    # Load ship placement data from placement.json
+    with open(file_path, "r", encoding="utf-8") as placement:
+        ship_data = json.load(placement)
+
+    # Place each ship on the board based on custom placement data
+    for ship, key in ship_data.items():
+        # Creates variables of all ship data
+        col = int(key[1])
+        row = int(key[0])
+        direction = key[2]
+        length = battleships.get(ship)
+
+        # Places the ship onto the board depending on direction
+        if direction == "v":
+            for i in range(length):
+                board[col + i][row] = ship
+        if direction == "h":
+            for i in range(length):
+                board[col][row + i] = ship
+
     return board
 
 def can_place_ship(board, row, col, size, horizontal):
@@ -93,6 +104,7 @@ def place_ship(board, ship, row, col, size, horizontal):
     else:
         for i in range(size):
             board[row + i][col] = ship
+
 
 def print_board(board):
     # Print column headers
