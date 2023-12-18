@@ -2,9 +2,9 @@ import os
 import json
 from flask import Flask, render_template, jsonify, request
 
-import components
-import game_engine
-import mp_game_engine
+from components import initialise_board, create_battleships, place_battleships, check_game_over
+from  game_engine import attack, print_board, cli_coordinates_input, simple_game_loop
+from mp_game_engine import generate_attack, ai_opponent_game_loop
 
 # Initialise the Flask object
 app = Flask(__name__)
@@ -44,7 +44,7 @@ def root():
     if request.method == "GET":
         # Places battleships on players board according to their choice on /placement
         # This is done by reading the ship placements from the placement.json file
-        player_board = components.place_battleships(
+        player_board = place_battleships(
             player_board, player_battleships, algorithm="custom"
         )
         # Updates player data dictionary with board with battleships placed
@@ -63,7 +63,7 @@ def process_attack():
             player_list = ["player", "BOT"]
             for username in player_list:
                 game_over = False
-                game_over = components.check_game_over(username, players)
+                game_over = check_game_over(username, players)
                 if game_over is True:
                     winner = "BOT" if username == "player" else "PLAYER"
                     break
@@ -83,7 +83,7 @@ def process_attack():
                 # Adds player attack to list to prevent repeat attacks on same coordinates
                 player_already_attacked.append(player_attack)
                 # Performs attack on bot board and returns hit or miss as True or False
-                outcome = game_engine.attack(
+                outcome = attack(
                     player_attack,
                     players["BOT"]["board"],
                     players["BOT"]["battleships"],
@@ -92,14 +92,14 @@ def process_attack():
                 # BOT attack on Player's board
                 # Loops until bot move is unique
                 while True:
-                    bot_attack = mp_game_engine.generate_attack(BOARD_SIZE)
+                    bot_attack = generate_attack(BOARD_SIZE)
                     # Checks if attack has already been played
                     if bot_attack not in bot_already_attacked:
                         break
                 # Adds bot attack to list for comparison
                 bot_already_attacked.append(bot_attack)
                 # Performs attack on player board
-                game_engine.attack(
+                attack(
                     bot_attack,
                     players["player"]["board"],
                     players["player"]["battleships"],
@@ -109,7 +109,7 @@ def process_attack():
             player_list = ["player", "BOT"]
             for username in player_list:
                 game_over = False
-                game_over = components.check_game_over(username, players)
+                game_over = check_game_over(username, players)
                 if game_over is True:
                     winner = "BOT" if username == "player" else "PLAYER"
                     break
@@ -153,14 +153,14 @@ bot_already_attacked = []
 player_already_attacked = []
 
 # Initialises the boards and battleships for player and BOT
-player_board = components.initialise_board(size=BOARD_SIZE)
-bot_board = components.initialise_board(size=BOARD_SIZE)
+player_board = initialise_board(size=BOARD_SIZE)
+bot_board = initialise_board(size=BOARD_SIZE)
 
-player_battleships = components.create_battleships()
-bot_battleships = components.create_battleships()
+player_battleships = create_battleships()
+bot_battleships = create_battleships()
 
 # Places BOT's battleships onto bot_board using random algorithm
-bot_board = components.place_battleships(bot_board, bot_battleships, algorithm="random")
+bot_board = place_battleships(bot_board, bot_battleships, algorithm="random")
 
 # Saves board and battleships into players dictionary
 players = {
